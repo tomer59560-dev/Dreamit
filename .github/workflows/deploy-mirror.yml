@@ -30,7 +30,7 @@ jobs:
 
       - name: Generate static mirror site
         env:
-          PAGES_BASE_URL: https://tomer59560-dev.github.io/META-ADS
+          PAGES_BASE_URL: https://tomer59560-dev.github.io/Dreamit
           DEFAULT_SHIPPING: '0'
           DEFAULT_DELIVERY: '3'
           DEFAULT_WARRANTY: '12 חודשים'
