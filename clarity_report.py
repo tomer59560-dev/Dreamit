@@ -36,21 +36,33 @@ API_BASE = "https://www.clarity.ms/export-data/api/v1"
 
 def fetch(dimension: str) -> list:
     url = f"{API_BASE}/project-live-insights"
-    params = {
-        "projectId": PROJECT_ID,
-        "numOfDays": DAYS,
-        "granularity": "daily",
-        "dimension": dimension,
-    }
+    end_date   = datetime.utcnow().strftime("%Y/%m/%d")
+    start_date = (datetime.utcnow() - timedelta(days=DAYS)).strftime("%Y/%m/%d")
+
+    # Try multiple param formats — Clarity API docs are inconsistent
+    attempts = [
+        {"projectId": PROJECT_ID, "startDate": start_date, "endDate": end_date,
+         "granularity": "Daily", "dimension": dimension.capitalize()},
+        {"projectId": PROJECT_ID, "startDate": start_date, "endDate": end_date,
+         "granularity": "daily", "dimension": dimension},
+        {"projectId": PROJECT_ID, "numOfDays": DAYS,
+         "granularity": "Daily", "dimension": dimension.capitalize()},
+        {"projectId": PROJECT_ID, "numOfDays": DAYS,
+         "granularity": "daily", "dimension": dimension},
+    ]
     headers = {"Authorization": f"Bearer {CLARITY_TOKEN}"}
-    resp = requests.get(url, params=params, headers=headers, timeout=30)
-    if not resp.ok:
-        print(f"API error ({dimension}): {resp.status_code} {resp.text}")
-        return []
-    data = resp.json()
-    if isinstance(data, list):
-        return data
-    return data.get("insights", data.get("data", [data]))
+
+    for params in attempts:
+        resp = requests.get(url, params=params, headers=headers, timeout=30)
+        if resp.ok:
+            data = resp.json()
+            if isinstance(data, list):
+                return data
+            return data.get("insights", data.get("data", data.get("metrics", [data])))
+        print(f"  [{dimension}] {resp.status_code} with params {list(params.keys())[2:]}: {resp.text[:200]}")
+
+    print(f"API error ({dimension}): all parameter formats failed.")
+    return []
 
 
 # ── Build report ───────────────────────────────────────────────────────────────
