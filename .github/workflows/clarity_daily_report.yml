@@ -1,0 +1,41 @@
+name: Clarity Daily Report
+
+on:
+  schedule:
+    - cron: '0 7 * * *'   # Every day at 7:00 AM UTC (10 AM Israel time)
+  workflow_dispatch:        # Also lets you trigger it manually from GitHub
+
+jobs:
+  send-report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Fetch Clarity data and send email report
+        env:
+          CLARITY_API_TOKEN: ${{ secrets.CLARITY_API_TOKEN }}
+          CLARITY_PROJECT_ID: ${{ secrets.CLARITY_PROJECT_ID }}
+          SMTP_HOST:          ${{ secrets.SMTP_HOST }}
+          SMTP_PORT:          ${{ secrets.SMTP_PORT }}
+          SMTP_USER:          ${{ secrets.SMTP_USER }}
+          SMTP_PASS:          ${{ secrets.SMTP_PASS }}
+          REPORT_TO:          dreamitisrael@outlook.com
+          CLARITY_DAYS:       "7"
+        run: python clarity_report.py
+
+      - name: Upload HTML report as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: clarity-report-${{ github.run_number }}
+          path: clarity_report.html
+          retention-days: 30
