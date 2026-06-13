@@ -36,32 +36,36 @@ API_BASE = "https://www.clarity.ms/export-data/api/v1"
 
 def fetch(dimension: str) -> list:
     url = f"{API_BASE}/project-live-insights"
-    end_date   = datetime.utcnow().strftime("%Y/%m/%d")
-    start_date = (datetime.utcnow() - timedelta(days=DAYS)).strftime("%Y/%m/%d")
+    end_date   = datetime.utcnow().strftime("%Y-%m-%d")
+    start_date = (datetime.utcnow() - timedelta(days=DAYS)).strftime("%Y-%m-%d")
 
-    # Try multiple param formats — Clarity API docs are inconsistent
     attempts = [
+        # Minimal — just projectId, no dimension/granularity
+        {"projectId": PROJECT_ID},
+        # With date range only
+        {"projectId": PROJECT_ID, "startDate": start_date, "endDate": end_date},
+        # With dimension (capitalized)
+        {"projectId": PROJECT_ID, "startDate": start_date, "endDate": end_date,
+         "dimension": dimension.capitalize()},
+        # With granularity + dimension
         {"projectId": PROJECT_ID, "startDate": start_date, "endDate": end_date,
          "granularity": "Daily", "dimension": dimension.capitalize()},
-        {"projectId": PROJECT_ID, "startDate": start_date, "endDate": end_date,
-         "granularity": "daily", "dimension": dimension},
-        {"projectId": PROJECT_ID, "numOfDays": DAYS,
-         "granularity": "Daily", "dimension": dimension.capitalize()},
-        {"projectId": PROJECT_ID, "numOfDays": DAYS,
-         "granularity": "daily", "dimension": dimension},
+        # numOfDays variants
+        {"projectId": PROJECT_ID, "numOfDays": str(DAYS)},
+        {"projectId": PROJECT_ID, "numOfDays": str(DAYS), "dimension": dimension.capitalize()},
     ]
     headers = {"Authorization": f"Bearer {CLARITY_TOKEN}"}
 
     for params in attempts:
         resp = requests.get(url, params=params, headers=headers, timeout=30)
+        print(f"  [{dimension}] {resp.status_code} params={list(params.keys())} body={resp.text[:300]}")
         if resp.ok:
             data = resp.json()
             if isinstance(data, list):
                 return data
             return data.get("insights", data.get("data", data.get("metrics", [data])))
-        print(f"  [{dimension}] {resp.status_code} with params {list(params.keys())[2:]}: {resp.text[:200]}")
 
-    print(f"API error ({dimension}): all parameter formats failed.")
+    print(f"API error ({dimension}): all formats failed. See logs above for details.")
     return []
 
 
@@ -245,7 +249,8 @@ def main():
     countries = fetch("country")
 
     if not pages:
-        print("No page data returned. Check your project ID and token.")
+        print("No page data returned — check logs above for API response details.")
+        print(f"PROJECT_ID={PROJECT_ID!r}  TOKEN_PREFIX={CLARITY_TOKEN[:30]}...")
         sys.exit(1)
 
     print(f"Got {len(pages)} page records, {len(devices)} device records, {len(countries)} country records.")
