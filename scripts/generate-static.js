@@ -235,16 +235,16 @@ function buildXml(products) {
     const image   = trunc(sanitizeUrl(p.image), 255);
     const price   = (p.price || '').replace(/[^\d.]/g, '');
     items += `    <PRODUCT>
-      <URL_PRODUCT>${xmlEsc(url)}</URL_PRODUCT>
-      <NAME_PRODUCT>${xmlEsc(name)}</NAME_PRODUCT>
+      <PRODUCT_URL>${xmlEsc(url)}</PRODUCT_URL>
+      <PRODUCT_NAME>${xmlEsc(name)}</PRODUCT_NAME>
       <MODEL>${xmlEsc(p.model)}</MODEL>
       <DETAILS>${xmlEsc(details)}</DETAILS>
-      <NUMBER_CATALOG>${xmlEsc(p.barcode)}</NUMBER_CATALOG>
+      <CATALOG_NUMBER>${xmlEsc(p.barcode)}</CATALOG_NUMBER>
       <PRODUCTCODE>${xmlEsc(p.id)}</PRODUCTCODE>
       <CURRENCY>ILS</CURRENCY>
       <PRICE>${xmlEsc(price)}</PRICE>
-      <COST_SHIPMENT>${xmlEsc(p.shipping)}</COST_SHIPMENT>
-      <TIME_DELIVERY>${xmlEsc(p.delivery)}</TIME_DELIVERY>
+      <SHIPMENT_COST>${xmlEsc(p.shipping)}</SHIPMENT_COST>
+      <DELIVERY_TIME>${xmlEsc(p.delivery)}</DELIVERY_TIME>
       <MANUFACTURER>${xmlEsc(p.brand)}</MANUFACTURER>
       <WARRANTY>${xmlEsc(trunc(p.warranty, 100))}</WARRANTY>
       <WARRANTYBY>${xmlEsc(trunc(p.warrantyBy, 200))}</WARRANTYBY>
