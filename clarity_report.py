@@ -34,190 +34,171 @@ API_BASE = "https://www.clarity.ms/export-data/api/v1"
 
 # ── Fetch ──────────────────────────────────────────────────────────────────────
 
-def fetch(dimension: str) -> list:
+def fetch_metrics() -> list:
+    """Fetch metrics from Clarity API. Returns list of {metricName, information:[...]} objects."""
     url = f"{API_BASE}/project-live-insights"
-    end_date   = datetime.utcnow().strftime("%Y-%m-%d")
-    start_date = (datetime.utcnow() - timedelta(days=DAYS)).strftime("%Y-%m-%d")
-
-    attempts = [
-        # Minimal — just projectId, no dimension/granularity
-        {"projectId": PROJECT_ID},
-        # With date range only
-        {"projectId": PROJECT_ID, "startDate": start_date, "endDate": end_date},
-        # With dimension (capitalized)
-        {"projectId": PROJECT_ID, "startDate": start_date, "endDate": end_date,
-         "dimension": dimension.capitalize()},
-        # With granularity + dimension
-        {"projectId": PROJECT_ID, "startDate": start_date, "endDate": end_date,
-         "granularity": "Daily", "dimension": dimension.capitalize()},
-        # numOfDays variants
-        {"projectId": PROJECT_ID, "numOfDays": str(DAYS)},
-        {"projectId": PROJECT_ID, "numOfDays": str(DAYS), "dimension": dimension.capitalize()},
-    ]
     headers = {"Authorization": f"Bearer {CLARITY_TOKEN}"}
-
-    for params in attempts:
-        resp = requests.get(url, params=params, headers=headers, timeout=30)
-        print(f"  [{dimension}] {resp.status_code} params={list(params.keys())} body={resp.text[:300]}")
-        if resp.ok:
-            data = resp.json()
-            if isinstance(data, list):
-                return data
-            return data.get("insights", data.get("data", data.get("metrics", [data])))
-
-    print(f"API error ({dimension}): all formats failed. See logs above for details.")
-    return []
+    resp = requests.get(url, params={"projectId": PROJECT_ID}, headers=headers, timeout=30)
+    if not resp.ok:
+        print(f"API error {resp.status_code}: {resp.text}")
+        sys.exit(1)
+    data = resp.json()
+    return data if isinstance(data, list) else data.get("metrics", data.get("data", [data]))
 
 
-# ── Build report ───────────────────────────────────────────────────────────────
+# ── Parse metrics ──────────────────────────────────────────────────────────────
 
-def top_rows(rows: list, sort_key: str, n: int = 5) -> list:
-    return sorted(rows, key=lambda r: r.get(sort_key, 0), reverse=True)[:n]
+def get_metric(metrics: list, name: str) -> dict:
+    """Find a metric by name (case-insensitive) and return its first information row."""
+    for m in metrics:
+        if m.get("metricName", "").lower() == name.lower():
+            info = m.get("information", [])
+            return info[0] if info else {}
+    return {}
 
 
-def fmt_pct(v) -> str:
+def num(v) -> int:
+    try: return int(v)
+    except Exception: return 0
+
+
+def pct(v) -> str:
     try:
         f = float(v)
-        return f"{f*100:.1f}%" if f <= 1 else f"{f:.1f}%"
+        return f"{f:.1f}%"
     except Exception:
-        return str(v)
+        return "—"
 
 
-def fmt_num(v) -> str:
-    try:
-        return f"{int(v):,}"
-    except Exception:
-        return str(v)
+def card(bg: str, value: str, label: str) -> str:
+    return (f'<div style="flex:1;min-width:140px;background:{bg};border-radius:10px;'
+            f'padding:18px;color:#fff;text-align:center">'
+            f'<div style="font-size:28px;font-weight:bold">{value}</div>'
+            f'<div style="font-size:12px;margin-top:6px;opacity:.9">{label}</div></div>')
 
 
-def find(row: dict, *keys):
-    for k in keys:
-        if k in row:
-            return row[k]
-    return "—"
-
-
-def dim_label(row: dict) -> str:
-    for k in ("url", "page", "pagePath", "path", "name", "key", "value", "dimension"):
-        if k in row:
-            v = str(row[k])
-            return v[:60] + "…" if len(v) > 60 else v
-    return "—"
-
-
-def table_html(headers: list, rows: list) -> str:
-    th = "".join(f'<th style="padding:8px 12px;text-align:left;background:#f0f0f0;border-bottom:2px solid #ddd">{h}</th>' for h in headers)
-    body = ""
-    for i, r in enumerate(rows):
-        bg = "#fff" if i % 2 == 0 else "#fafafa"
-        cells = "".join(f'<td style="padding:8px 12px;border-bottom:1px solid #eee">{c}</td>' for c in r)
-        body += f'<tr style="background:{bg}">{cells}</tr>'
-    return f'<table style="border-collapse:collapse;width:100%;font-size:14px"><thead><tr>{th}</tr></thead><tbody>{body}</tbody></table>'
-
-
-def section(title: str, color: str, content: str) -> str:
+def metric_row(color: str, icon: str, title: str, value: str, detail: str, what_it_means: str) -> str:
     return f"""
-    <div style="margin:24px 0">
-      <h2 style="color:{color};border-left:4px solid {color};padding-left:10px;margin-bottom:12px">{title}</h2>
-      {content}
-    </div>"""
+    <tr>
+      <td style="padding:14px 12px;border-bottom:1px solid #eee;width:40px;font-size:22px">{icon}</td>
+      <td style="padding:14px 12px;border-bottom:1px solid #eee">
+        <strong style="color:{color}">{title}</strong><br>
+        <span style="color:#555;font-size:13px">{what_it_means}</span>
+      </td>
+      <td style="padding:14px 12px;border-bottom:1px solid #eee;text-align:right;white-space:nowrap">
+        <span style="font-size:20px;font-weight:bold;color:{color}">{value}</span><br>
+        <span style="font-size:12px;color:#888">{detail}</span>
+      </td>
+    </tr>"""
 
 
-def build_html(pages: list, devices: list, countries: list) -> str:
-    date_range = f"Last {DAYS} days ending {datetime.utcnow().strftime('%b %d, %Y')}"
+# ── Build HTML email ───────────────────────────────────────────────────────────
 
-    # ── Summary card ──
-    total_sessions = sum(find(r, "sessions", "totalSessionCount", "sessionCount") or 0 for r in pages)
-    avg_bounce     = sum(float(find(r, "bounceRate") or 0) for r in pages) / max(len(pages), 1)
-    avg_scroll     = sum(float(find(r, "scrollDepth", "avgScrollDepth") or 0) for r in pages) / max(len(pages), 1)
-    total_rage     = sum(int(find(r, "rageClicks", "rageClickCount") or 0) for r in pages)
-    total_dead     = sum(int(find(r, "deadClicks", "deadClickCount") or 0) for r in pages)
+def build_html(metrics: list) -> str:
+    date_range = f"Last {DAYS} days — {datetime.utcnow().strftime('%b %d, %Y')}"
 
-    summary = f"""
-    <div style="display:flex;gap:12px;flex-wrap:wrap;margin:16px 0">
-      {''.join(f'<div style="flex:1;min-width:130px;background:{bg};border-radius:8px;padding:16px;color:#fff;text-align:center"><div style="font-size:24px;font-weight:bold">{val}</div><div style="font-size:12px;margin-top:4px">{lbl}</div></div>'
-      for bg, val, lbl in [
-        ("#4361ee", fmt_num(total_sessions), "Sessions"),
-        ("#f72585", fmt_pct(avg_bounce),     "Avg Bounce Rate"),
-        ("#7209b7", fmt_pct(avg_scroll),     "Avg Scroll Depth"),
-        ("#e63946", fmt_num(total_rage),     "Rage Clicks"),
-        ("#457b9d", fmt_num(total_dead),     "Dead Clicks"),
-      ])}
-    </div>"""
+    # Extract known metrics
+    dead   = get_metric(metrics, "DeadClickCount")
+    rage   = get_metric(metrics, "RageClickCount")
+    scroll = get_metric(metrics, "ExcessiveScroll")
+    quick  = get_metric(metrics, "QuickBackClick")
 
-    # ── Top pages ──
-    page_col  = "sessions" if any("sessions" in r for r in pages) else "totalSessionCount"
-    top_pages = top_rows(pages, page_col, 8)
-    pages_tbl = table_html(
-        ["Page", "Sessions", "Bounce Rate", "Scroll Depth", "Rage Clicks"],
-        [(dim_label(r),
-          fmt_num(find(r, "sessions", "totalSessionCount", "sessionCount")),
-          fmt_pct(find(r, "bounceRate")),
-          fmt_pct(find(r, "scrollDepth", "avgScrollDepth")),
-          fmt_num(find(r, "rageClicks", "rageClickCount")))
-         for r in top_pages]
-    )
+    # Sessions total (same across all metrics)
+    sessions = num(dead.get("sessionsCount") or rage.get("sessionsCount") or
+                   scroll.get("sessionsCount") or "0")
 
-    # ── Rage click hotspots ──
-    rage_rows = top_rows(pages, "rageClicks" if pages and "rageClicks" in pages[0] else "rageClickCount", 5)
-    rage_tbl  = table_html(
-        ["Page", "Rage Clicks", "Sessions"],
-        [(dim_label(r),
-          f'<span style="color:#e63946;font-weight:bold">{fmt_num(find(r,"rageClicks","rageClickCount"))}</span>',
-          fmt_num(find(r, "sessions", "totalSessionCount")))
-         for r in rage_rows]
-    )
+    # Build summary cards
+    cards_html = '<div style="display:flex;gap:10px;flex-wrap:wrap;margin:16px 0">'
+    cards_html += card("#4361ee", f"{sessions:,}", "Total Sessions")
 
-    # ── Low scroll depth (drop-off) ──
-    scroll_key = "scrollDepth" if pages and "scrollDepth" in pages[0] else "avgScrollDepth"
-    drop_rows  = sorted(pages, key=lambda r: float(r.get(scroll_key, 1)), reverse=False)[:5]
-    drop_tbl   = table_html(
-        ["Page", "Scroll Depth", "Sessions"],
-        [(dim_label(r),
-          f'<span style="color:#f4a261;font-weight:bold">{fmt_pct(find(r,scroll_key))}</span>',
-          fmt_num(find(r, "sessions", "totalSessionCount")))
-         for r in drop_rows]
-    )
+    for m in metrics:
+        info = m.get("information", [{}])[0]
+        pct_with = info.get("sessionsWithMetricPercentage", 0)
+        sub = num(info.get("subTotal", 0))
+        name = m.get("metricName", "")
+        color_map = {
+            "DeadClickCount":   "#457b9d",
+            "RageClickCount":   "#e63946",
+            "ExcessiveScroll":  "#f4a261",
+            "QuickBackClick":   "#7209b7",
+        }
+        label_map = {
+            "DeadClickCount":  "Dead Clicks",
+            "RageClickCount":  "Rage Clicks",
+            "ExcessiveScroll": "Excessive Scrolls",
+            "QuickBackClick":  "Quick Backs",
+        }
+        if name in color_map:
+            cards_html += card(color_map[name], f"{sub:,}", label_map[name])
+    cards_html += '</div>'
 
-    # ── Devices ──
-    dev_tbl = table_html(
-        ["Device", "Sessions", "Bounce Rate", "Scroll Depth"],
-        [(dim_label(r),
-          fmt_num(find(r, "sessions", "totalSessionCount")),
-          fmt_pct(find(r, "bounceRate")),
-          fmt_pct(find(r, "scrollDepth")))
-         for r in top_rows(devices, "sessions" if devices and "sessions" in devices[0] else "totalSessionCount", 5)]
-    ) if devices else "<p>No device data.</p>"
+    # Build detail rows
+    rows_html = ""
+    metric_defs = [
+        ("RageClickCount",  "#e63946", "😤", "Rage Clicks",
+         "Users clicking the same spot multiple times in frustration — usually a broken button or unclickable element."),
+        ("DeadClickCount",  "#457b9d", "☠️", "Dead Clicks",
+         "Clicks that do nothing — users expecting something to be clickable but it isn't."),
+        ("ExcessiveScroll", "#f4a261", "📜", "Excessive Scrolling",
+         "Users scrolling up and down repeatedly — they can't find what they're looking for."),
+        ("QuickBackClick",  "#7209b7", "⏪", "Quick Back Clicks",
+         "Users landing on a page and immediately going back — the page didn't match their expectation."),
+    ]
 
-    # ── Countries ──
-    cty_tbl = table_html(
-        ["Country", "Sessions", "Bounce Rate"],
-        [(dim_label(r),
-          fmt_num(find(r, "sessions", "totalSessionCount")),
-          fmt_pct(find(r, "bounceRate")))
-         for r in top_rows(countries, "sessions" if countries and "sessions" in countries[0] else "totalSessionCount", 5)]
-    ) if countries else "<p>No country data.</p>"
+    for mname, color, icon, title, meaning in metric_defs:
+        m = get_metric(metrics, mname)
+        if not m:
+            continue
+        sub      = num(m.get("subTotal", 0))
+        pct_with = float(m.get("sessionsWithMetricPercentage", 0))
+        rows_html += metric_row(
+            color, icon, title,
+            value=f"{sub:,}",
+            detail=f"{pct_with:.1f}% of sessions affected",
+            what_it_means=meaning
+        )
 
-    return f"""
-<!DOCTYPE html><html><head><meta charset="utf-8">
-<style>body{{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#222;max-width:700px;margin:0 auto;padding:24px}}</style>
+    detail_table = f'<table style="border-collapse:collapse;width:100%">{rows_html}</table>'
+
+    # Practical conclusions
+    conclusions = []
+    rage_info  = get_metric(metrics, "RageClickCount")
+    dead_info  = get_metric(metrics, "DeadClickCount")
+    scroll_info = get_metric(metrics, "ExcessiveScroll")
+    quick_info  = get_metric(metrics, "QuickBackClick")
+
+    if float(rage_info.get("sessionsWithMetricPercentage", 0)) > 5:
+        conclusions.append("⚠️ <strong>Rage clicks are high</strong> — check your add-to-cart button, checkout flow, and any buttons that look clickable but might be broken on mobile.")
+    if float(dead_info.get("sessionsWithMetricPercentage", 0)) > 10:
+        conclusions.append("⚠️ <strong>Too many dead clicks</strong> — customers are tapping on product images or text expecting links. Consider making more elements clickable.")
+    if float(scroll_info.get("sessionsWithMetricPercentage", 0)) > 15:
+        conclusions.append("⚠️ <strong>Excessive scrolling detected</strong> — customers struggle to find key info (price, size, CTA). Simplify your page layout.")
+    if float(quick_info.get("sessionsWithMetricPercentage", 0)) > 10:
+        conclusions.append("⚠️ <strong>High quick-back rate</strong> — customers land and immediately leave. Check if your page loads slowly or if ad targeting is sending wrong audience.")
+    if not conclusions:
+        conclusions.append("✅ <strong>All metrics look healthy!</strong> Keep monitoring for changes.")
+
+    conclusions_html = "<ul style='padding-left:20px'>" + "".join(f"<li style='margin-bottom:10px'>{c}</li>" for c in conclusions) + "</ul>"
+
+    return f"""<!DOCTYPE html><html><head><meta charset="utf-8">
+<style>body{{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#222;max-width:680px;margin:0 auto;padding:24px}}</style>
 </head><body>
 <div style="background:linear-gradient(135deg,#4361ee,#7209b7);border-radius:12px;padding:24px;color:#fff;margin-bottom:24px">
-  <h1 style="margin:0;font-size:22px">🛍️ Dreamit Store — Clarity Daily Report</h1>
+  <h1 style="margin:0;font-size:22px">Dreamit Store — Clarity Report</h1>
   <p style="margin:6px 0 0;opacity:.85">{date_range}</p>
 </div>
 
-{section("📊 Overview", "#4361ee", summary)}
-{section("🔥 Top Pages by Traffic", "#4361ee", pages_tbl)}
-{section("😤 Rage Click Hotspots", "#e63946",
-  "<p style='color:#555;font-size:13px'>Users clicking repeatedly in frustration — likely broken elements or confusing UX.</p>" + rage_tbl)}
-{section("📉 Pages Users Abandon (Low Scroll)", "#f4a261",
-  "<p style='color:#555;font-size:13px'>Pages where users don't scroll — content may not be engaging or loading correctly.</p>" + drop_tbl)}
-{section("📱 Traffic by Device", "#7209b7", dev_tbl)}
-{section("🌍 Traffic by Country", "#457b9d", cty_tbl)}
+<h2 style="color:#4361ee;border-left:4px solid #4361ee;padding-left:10px">Overview</h2>
+{cards_html}
 
-<div style="margin-top:32px;padding:16px;background:#f8f9fa;border-radius:8px;font-size:12px;color:#888;text-align:center">
-  Auto-generated by Clarity Daily Report · Project {PROJECT_ID}<br>
+<h2 style="color:#333;border-left:4px solid #333;padding-left:10px;margin-top:28px">Behavior Metrics</h2>
+{detail_table}
+
+<h2 style="color:#2a9d8f;border-left:4px solid #2a9d8f;padding-left:10px;margin-top:28px">Practical Conclusions</h2>
+{conclusions_html}
+
+<div style="margin-top:32px;padding:14px;background:#f8f9fa;border-radius:8px;font-size:12px;color:#888;text-align:center">
+  Auto-generated daily · Project {PROJECT_ID}<br>
   <a href="https://clarity.microsoft.com/projects/view/{PROJECT_ID}/dashboard" style="color:#4361ee">Open Clarity Dashboard →</a>
 </div>
 </body></html>"""
@@ -227,7 +208,7 @@ def build_html(pages: list, devices: list, countries: list) -> str:
 
 def send_email(html: str):
     msg = MIMEMultipart("alternative")
-    msg["Subject"] = f"Clarity Store Report — {datetime.utcnow().strftime('%b %d, %Y')}"
+    msg["Subject"] = f"Dreamit Store — Clarity Report {datetime.utcnow().strftime('%b %d, %Y')}"
     msg["From"]    = SMTP_USER
     msg["To"]      = REPORT_TO
     msg.attach(MIMEText(html, "html"))
@@ -244,24 +225,15 @@ def send_email(html: str):
 
 def main():
     print("Fetching Clarity data...")
-    pages     = fetch("page")
-    devices   = fetch("device")
-    countries = fetch("country")
+    metrics = fetch_metrics()
+    print(f"Got {len(metrics)} metric types: {[m.get('metricName') for m in metrics]}")
 
-    if not pages:
-        print("No page data returned — check logs above for API response details.")
-        print(f"PROJECT_ID={PROJECT_ID!r}  TOKEN_PREFIX={CLARITY_TOKEN[:30]}...")
-        sys.exit(1)
-
-    print(f"Got {len(pages)} page records, {len(devices)} device records, {len(countries)} country records.")
-
-    html = build_html(pages, devices, countries)
-
-    # Save a copy locally / as artifact
+    html = build_html(metrics)
     Path("clarity_report.html").write_text(html)
     print("Report saved to clarity_report.html")
 
     send_email(html)
+    print("Done!")
 
 
 if __name__ == "__main__":
