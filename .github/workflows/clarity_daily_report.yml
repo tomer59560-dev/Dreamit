@@ -1,9 +1,7 @@
 name: Clarity Daily Report
 
 on:
-  schedule:
-    - cron: '0 7 * * *'   # Every day at 7:00 AM UTC (10 AM Israel time)
-  workflow_dispatch:        # Also lets you trigger it manually from GitHub
+  workflow_dispatch:        # Manual trigger only
 
 jobs:
   send-report:
