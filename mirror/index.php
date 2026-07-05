@@ -73,10 +73,83 @@ function fetchHtml($url) {
     return $html ?: '';
 }
 
+// ─── Shopify storefront JSON (dreamitisrael.com runs on Shopify) ─────────────
+
+function getCategoriesShopify() {
+    $json = @json_decode(fetchHtml(STORE_URL . '/collections.json?limit=250'), true);
+    if (empty($json['collections']) || !is_array($json['collections'])) return [];
+    $cats = [];
+    foreach ($json['collections'] as $c) {
+        if (empty($c['handle']) || empty($c['title'])) continue;
+        $cats[] = [
+            'slug' => $c['handle'],
+            'name' => $c['title'],
+            'url'  => STORE_URL . '/collections/' . $c['handle'],
+        ];
+    }
+    return $cats;
+}
+
+function getProductsShopify($slug) {
+    $products = [];
+    $page = 1;
+    while (true) {
+        $json = @json_decode(
+            fetchHtml(STORE_URL . '/collections/' . rawurlencode($slug) . '/products.json?limit=250&page=' . $page),
+            true
+        );
+        if (empty($json['products']) || !is_array($json['products'])) break;
+        foreach ($json['products'] as $p) {
+            $prod = productFromShopify($p);
+            if ($prod) $products[] = $prod;
+        }
+        if (count($json['products']) < 250) break;
+        $page++;
+    }
+    return $products;
+}
+
+function productFromShopify($p) {
+    if (empty($p['handle'])) return null;
+
+    // Prefer the first in-stock variant; fall back to the first variant
+    $v = null;
+    foreach (($p['variants'] ?? []) as $vv) {
+        if (!empty($vv['available'])) { $v = $vv; break; }
+    }
+    if (!$v) $v = $p['variants'][0] ?? null;
+    if (!$v || $v['price'] === '' || $v['price'] === null) return null;
+
+    return [
+        'id'          => (string)($v['sku'] ?: $p['id']),
+        'name'        => strip_tags($p['title'] ?? ''),
+        'model'       => (string)($v['sku'] ?? ''),
+        'description' => trim(strip_tags($p['body_html'] ?? '')),
+        'url'         => STORE_URL . '/products/' . $p['handle'],
+        'image'       => $p['images'][0]['src'] ?? '',
+        'price'       => preg_replace('/[^\d.]/', '', (string)$v['price']),
+        'barcode'     => '',
+        'brand'       => $p['vendor'] ?? '',
+        'warranty'    => DEFAULT_WARRANTY,
+        'warrantyBy'  => DEFAULT_WARRANTY_BY,
+        'shipping'    => DEFAULT_SHIPPING,
+        'delivery'    => DEFAULT_DELIVERY,
+        'openPrice'   => '',
+    ];
+}
+
 function getCategories() {
     $cached = cacheGet('categories');
     if ($cached) return $cached;
 
+    // Shopify first — this is the live platform
+    $cats = getCategoriesShopify();
+    if (!empty($cats)) {
+        cacheSet('categories', $cats);
+        return $cats;
+    }
+
+    // Legacy WooCommerce fallbacks below (kept in case the platform changes)
     $html = fetchHtml(STORE_URL . '/');
     $cats = [];
 
@@ -118,10 +191,17 @@ function getProducts($slug, $categoryUrl) {
     $cached = cacheGet('products_' . $slug);
     if ($cached) return $cached;
 
+    // Shopify first — this is the live platform
+    $products = getProductsShopify($slug);
+    if (!empty($products)) {
+        cacheSet('products_' . $slug, $products);
+        return $products;
+    }
+
     $products = [];
     $page = 1;
 
-    // Try WooCommerce REST API first (faster, no auth needed for public stores)
+    // Legacy WooCommerce fallback (kept in case the platform changes)
     $apiJson = @json_decode(
         fetchHtml(STORE_URL . '/wp-json/wc/v3/products?per_page=100&category_slug=' . urlencode($slug) . '&status=publish'),
         true
