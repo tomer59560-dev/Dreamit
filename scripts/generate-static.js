@@ -16,6 +16,20 @@ const CAT_DIR    = path.join(DIST_DIR, 'category');
 // Free shipping for all products (site offers free shipping)
 const SHIPPING_BY_SKU = {};
 
+// Fixed sale prices (incl. VAT) per SKU — from client price sheet
+const PRICE_BY_SKU = {
+  CLOUD: '299', HUG: '299', CLOUDY: '1599', FLOW360: '1099', AURI: '599',
+  FLOWER: '1599', NEST: '199', Oli: '249', 'FLOWER-BASE': '249', BENCHY: '599',
+  CloudHugSet: '589', FlowerCloudSet: '1889', FlowerHugSet: '1889',
+  HugDuoSet: '589', CloudDuoSet: '589', AuriCloudSet: '889',
+  AuriCozySet: '889', FlowSoftSet: '1389', FlowContrastSet: '1389',
+  CloudyHugSet: '1889', CLOUDYSET: '1889', Flow360Duo: '2189',
+  CloudyDuo: '3189', AuriDuo: '1149', AuriOli: '839', AuriNest: '789',
+  AuriBenchy: '1189', FlowNest: '1289', FlowBenchy: '1689',
+  CloudyLoungeDuo: '3749', CloudyBenchy: '2189', FlowerDuo: '3189',
+  FlowerLounge: '1839',
+};
+
 const DEFAULT_SHIPPING    = process.env.DEFAULT_SHIPPING    || '0';
 const DEFAULT_DELIVERY    = process.env.DEFAULT_DELIVERY    || '3';
 const DEFAULT_WARRANTY    = process.env.DEFAULT_WARRANTY    || '12 חודשים';
@@ -83,7 +97,7 @@ async function getProductsShopify(collectionHandle) {
         description: strip(p.body_html || ''),
         url:         `${SITE_URL}/products/${p.handle}`,
         image,
-        price:       variant.price || '',
+        price:       PRICE_BY_SKU[variant.sku] || variant.price || '',
         barcode:     variant.barcode || '',
         brand,
         warranty:    DEFAULT_WARRANTY,
@@ -114,7 +128,7 @@ async function getProductsWC(catId) {
     return {
       id: String(p.id), name: strip(p.name), model: p.sku || '',
       description: strip(p.short_description || p.description),
-      url: p.permalink, image, price: p.price || '',
+      url: p.permalink, image, price: PRICE_BY_SKU[p.sku] || p.price || '',
       barcode: '', brand,
       warranty: DEFAULT_WARRANTY, warrantyBy: DEFAULT_WARRANTY_BY,
       shipping: SHIPPING_BY_SKU[p.sku] || DEFAULT_SHIPPING, delivery: DEFAULT_DELIVERY,
@@ -178,7 +192,7 @@ async function scrapeShopifyCollection(handle) {
         products.push({
           id: String(v.id || p.id), name: strip(p.title), model: v.sku || p.handle,
           description: strip(p.body_html), url: fullUrl,
-          image: p.images?.[0]?.src || '', price: v.price || '',
+          image: p.images?.[0]?.src || '', price: PRICE_BY_SKU[v.sku] || v.price || '',
           barcode: v.barcode || '', brand: p.vendor || '',
           warranty: DEFAULT_WARRANTY, warrantyBy: DEFAULT_WARRANTY_BY,
           shipping: SHIPPING_BY_SKU[v.sku] || DEFAULT_SHIPPING, delivery: DEFAULT_DELIVERY,
