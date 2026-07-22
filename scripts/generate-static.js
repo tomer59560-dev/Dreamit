@@ -13,18 +13,8 @@ const STORE_NAME = 'Dream It Israel';
 const DIST_DIR   = path.resolve(__dirname, '../dist');
 const CAT_DIR    = path.join(DIST_DIR, 'category');
 
-const SHIPPING_BY_SKU = {
-  CLOUD: '50', HUG: '50', CLOUDY: '90', FLOW360: '90', AURI: '50',
-  FLOWER: '90', NEST: '40', Oli: '40', 'FLOWER-BASE': '50', BENCHY: '50',
-  CloudHugSet: '100', FlowerCloudSet: '140', FlowerHugSet: '140',
-  HugDuoSet: '100', CloudDuoSet: '100', AuriCloudSet: '100',
-  AuriCozySet: '100', FlowSoftSet: '140', FlowContrastSet: '140',
-  CloudyHugSet: '140', CLOUDYSET: '140', Flow360Duo: '180',
-  CloudyDuo: '180', AuriDuo: '100', AuriOli: '90', AuriNest: '90',
-  AuriBenchy: '100', FlowNest: '140', FlowBenchy: '140',
-  CloudyLoungeDuo: '280', CloudyBenchy: '140', FlowerDuo: '180',
-  FlowerLounge: '140',
-};
+// Free shipping for all products (site offers free shipping)
+const SHIPPING_BY_SKU = {};
 
 const DEFAULT_SHIPPING    = process.env.DEFAULT_SHIPPING    || '0';
 const DEFAULT_DELIVERY    = process.env.DEFAULT_DELIVERY    || '3';
