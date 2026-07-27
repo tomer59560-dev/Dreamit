@@ -1,358 +1,359 @@
 # Dreamit SEO Roadmap
 
 **Site:** https://www.dreamitisrael.com (Shopify, Hebrew, Israel)
-**Baseline measured:** 27 July 2026
-**Data sources:** DataForSEO Labs (Israel / `he`), Firecrawl site map, live page scrapes
+**Baseline:** 27 July 2026 · **revised with Google Search Console data**
+**Sources:** Google Search Console (27 Jun – 24 Jul 2026), DataForSEO Labs (Israel / `he`), Firecrawl
+
+> **Revision note.** The first version of this roadmap estimated ~40 organic visits/month from
+> third-party data. Search Console shows the real number is **~190 clicks/month**. More importantly,
+> it revealed that the primary problem is **not** what third-party data suggested. Sections 0–2 and
+> the Day-30/60 phases have been substantially rewritten.
 
 ---
 
-## 0. Where you are today
+## 0. Where you actually are
 
-This is measured, not estimated.
+### Headline numbers — last 28 days (27 Jun – 24 Jul 2026)
 
 | Metric | Value |
 |---|---|
-| Keywords ranking in Google Israel | **7** |
-| Estimated organic traffic | **~40 visits/month** |
-| Share of that traffic from ONE keyword | **95%** (`הדום בוקלה`, position 4) |
-| Domain rank | 78 (very low) |
-| Products on site | 33 |
-| Collections | 11 (5 of them empty or unoptimised) |
-| Blog posts published | **0** |
-| Google Search Console connected | **No** |
+| Clicks | **174** (~190/month) |
+| Impressions | **2,912** |
+| Average CTR | 5.97% |
+| Average position | ~7 |
+| Property verified | **14 May 2026** — only 10 weeks of history exists |
+| Property type | **URL-prefix** (`https://www.dreamitisrael.com/`), not domain |
 
-### The 7 keywords you actually rank for
+Third-party tools estimated 40 visits/month. The real figure is **4.4× higher**. That is normal —
+estimation tools cannot see branded or long-tail traffic. Always trust Search Console.
 
-| Keyword | Volume/mo | Position | Traffic | Real commercial value? |
+### But strip out your own name
+
+| Segment | Impressions | Clicks | CTR |
+|---|---|---|---|
+| **Branded** (`dreamit`, `דרימיט`, `dream it`, `דרים איט`, `dreamit israel`) | 155 | **71** | 45.8% |
+| **Everything else** | 2,757 | **103** | 3.7% |
+
+**41% of your clicks are people already looking for you by name.** Real discovery traffic is
+roughly **110 clicks/month**. That is the number to grow.
+
+### Growth trajectory
+
+Impressions have gone from **~18/day in mid-May to ~110–145/day in late July** — roughly **7× in
+ten weeks**. Clicks have stayed flat at 5–7/day.
+
+That divergence is the whole story: **Google is showing you far more, and it is not translating
+into visits.**
+
+---
+
+## 1. The finding that changes the plan
+
+You do not primarily have a ranking problem. **You have a click-through problem.**
+
+### Top-3 positions producing almost no clicks
+
+| Query | Position | Impressions | Clicks | CTR | Expected at that position |
+|---|---|---|---|---|---|
+| <span dir="rtl">כורסאות בוקלה</span> | **1.67** | 9 | 0 | 0% | ~20% |
+| <span dir="rtl">כורסאות מסתובבות</span> | **2.48** | 42 | 1 | 2.4% | ~12% |
+| <span dir="rtl">כורסה מסתובבת</span> | **2.77** | 30 | 1 | 3.3% | ~11% |
+| <span dir="rtl">זוג כורסאות לסלון</span> | **2.87** | 39 | **0** | 0% | ~11% |
+| <span dir="rtl">זוג כורסאות</span> | **3.03** | 37 | 1 | 2.7% | ~10% |
+| <span dir="rtl">כורסא מסתובבת לסלון</span> | **3.07** | 15 | **0** | 0% | ~10% |
+| <span dir="rtl">הדום בוקלה</span> | 4.29 | 153 | 2 | 1.3% | ~8% |
+| <span dir="rtl">כורסה עגולה</span> | 4.71 | 17 | **0** | 0% | ~7% |
+
+And at page level:
+
+| Page | Position | Impressions | Clicks | CTR |
 |---|---|---|---|---|
-| `הדום בוקלה` | 390 | **4** | 37.9 | ✅ Yes — your one asset |
-| `זוג כורסאות` | 110 | 19 | 0.5 | ✅ Yes |
-| `ספסל בוקלה` | 70 | 21 | 0.2 | ✅ Yes |
-| `דרים הום רהיטים` | 260 | 22 | 0.9 | ❌ Competitor's brand |
-| `dream israel` | 110 | 26 | 0.2 | ❌ Irrelevant |
-| `רהיטים מושב הודיה` | 90 | 51 | 0.2 | ❌ Competitor's brand |
-| `דום בצל הזית` | 70 | 40 | 0.1 | ❌ A hotel. Accidental match |
+| `/products/cloudy-swivel-armchairs-set` | **3.72** | 234 | **2** | 0.85% |
+| `/collections/הדומים-וספסלים` | 10.9 | **833** | 15 | 1.8% |
+| `/pages/contact` | 4.61 | 308 | **1** | 0.32% |
+| `/pages/about` | 3.79 | 209 | 4 | 1.9% |
 
-**Read that honestly:** you have three real rankings, one of which carries everything. And that
-one — `הדום בוקלה` — is **down 56% year-over-year**. Bouclé as a search trend is fading. If you
-build the strategy on bouclé you are building on a melting asset.
+**You have already won the rankings on these terms. You are simply not being clicked.**
 
----
+Bringing just the identified terms and pages up to normal CTR for the positions they *already
+hold* is worth roughly **+40–50 clicks/month — a ~25% lift with no new content whatsoever.**
+That is the single cheapest win available to you, and it is why the Day-30 phase has been rewritten
+around it.
 
-## 1. The opportunity, sized
+### Why is CTR so low? Four likely causes, in order
 
-Measured demand across 31 head and mid-tail terms in your exact category:
+1. **Review stars almost never show.** You have 450 Judge.me reviews. `REVIEW_SNIPPET` appears on
+   only **148 of 2,912 impressions (5%)**. `PRODUCT_SNIPPETS` appears on 826 (28%). Your competitors
+   show stars and prices; you mostly don't. **Fix the review schema first** — it is the highest-
+   leverage item on this entire list.
+2. **SERP features push you below the fold.** These SERPs carry image packs, shopping carousels and
+   video. "Position 2" organic can sit well down the page on mobile.
+3. **Brand recognition.** Against IKEA and Betili, an unknown name loses the click even from a
+   better position. This is why brand-building is an SEO activity, not just a marketing one.
+4. **Titles truncate.** Long Hebrew product titles get cut off in mobile results.
 
-| Keyword | Volume/mo | Intent | Competitor referring domains |
-|---|---|---|---|
-| `כורסא` / `כורסה` / `כורסאות` | **18,100** | Informational | 2.7 · **KD 2** |
-| `כורסא לסלון` / `כורסאות לסלון` | **12,100** | **Transactional** | 2.0 |
-| `הדום` | **6,600** | Informational | 0.7 |
-| `פינת ישיבה` | **3,600** | Informational | 0.3 |
-| `הדום אחסון` | **2,900** | Informational | **0.2** |
-| `ספסל אחסון` | **2,900** | **Transactional** | — |
-| `ריהוט לבית` | 2,400 | Informational | — |
-| `כורסא לחדר שינה` | 1,000 | **Transactional** | 0.8 |
-| `כורסאות מעוצבות` | 880 | Commercial | 0.9 |
-| `כורסא מסתובבת` | 720 | **Transactional** | 1.1 — *+83% YoY* |
-| `הדום לסלון` | 720 | Informational | 0.4 |
-| `ריהוט לסלון` | 590 | **Transactional** | 3.5 |
-| `ספסל לחדר שינה` | 590 | **Transactional** | — |
-| `כורסא בוקלה` | 590 | Informational | — *(−46% YoY)* |
-| `ספסל מרופד` | 480 | Informational | — *+85% YoY* |
-| `פינת ישיבה לסלון` | 480 | Informational | 12.3 · KD 7 |
-| `כורסא עם הדום` | 390 | Informational | — |
-| `הדום בוקלה` | 390 | Informational | 0.2 — *(−56% YoY)* |
-| `בוקלה` | 390 | Informational | 1.4 — *+50% YoY* |
-| `כורסא מסתובבת לסלון` | 260 | **Transactional** | 1.1 — ***+129% YoY*** |
-| + 11 more terms | ~1,600 | mixed | low |
+### Desktop is materially worse than mobile
 
-**Total measured head/mid demand: ~59,300 searches/month.** With long tail, the addressable
-category is realistically 120,000–150,000 searches/month in Israel.
+| Device | Impressions | Clicks | CTR | Avg position |
+|---|---|---|---|---|
+| Mobile | 1,592 | **124** | 7.8% | **5.9** |
+| Desktop | 1,293 | 46 | 3.6% | **9.8** |
+| Tablet | 27 | 4 | 14.8% | 4.4 |
 
-You are currently capturing **40**. That is **0.07%**.
-
-### The single most important finding
-
-Look at the right-hand column. The pages ranking on page one for these terms have
-**0.2 to 2.7 referring domains**. `כורסא` — 18,100 searches a month — has a **keyword
-difficulty of 2 out of 100**.
-
-This category is **not defended by backlinks**. It is won by whoever publishes the most
-useful, best-structured Hebrew content and the deepest product pages. That is unusual, it
-is very good news for you, and it is why an aggressive timeline below is realistic rather
-than fantasy.
-
-It also will not last. Someone will figure this out. The window is maybe 18–24 months.
-
-### Who you are actually competing with
-
-| Domain | Avg position | Est. traffic | Notes |
-|---|---|---|---|
-| **ikea.com** | 1.8 | 10,308 | #1 for `כורסא`, `הדום`, `ספסל אחסון`, `הדום אחסון`, `כורסא לחדר שינה`, `כורסאות מעוצבות` |
-| betili-shop.com | 12.1 | 1,538 | #1 `כורסא מסתובבת`, #4 `כורסא` |
-| urban-shop.co.il | 12.6 | 683 | #4 `הדום` |
-| leopardhome.com | 11.3 | 581 | #4 `כורסא מסתובבת`, #8 `כורסא` |
-| take-it.co.il | 16.0 | 538 | #4 `ספסל אחסון` |
-| studio26shop.com | 21.3 | 517 | #2 `ספסל אחסון` |
-| ace.co.il | 14.4 | 426 | #3 `הדום אחסון` |
-| kadohome.co.il | 20.1 | 265 | #3 `כורסא מסתובבת` |
-| **dreamitisrael.com** | — | **40** | **not in the top 15 for any of them** |
-
-**IKEA is a wall — accept it.** They hold #1 on most head terms and you will not take that
-in year one. Your realistic goal is to own **positions 2–5** on head terms and **#1 on
-everything specific**: swivel armchairs, armchair+ottoman sets, bouclé, storage benches,
-business/hospitality seating. IKEA is broad and shallow; you can be narrow and deep.
-
-Also note: **Instagram ranks #7 for `הדום` and #8 for `ספסל אחסון`.** Visual social content
-ranks in this category. Your Instagram and TikTok are SEO assets, not just social channels.
+Mobile drives **71% of clicks**. Desktop ranks nearly four positions worse for the same site —
+worth investigating as a separate issue.
 
 ---
 
-## 2. Start here — Week 1, before anything else
+## 2. What is quietly working — and should be scaled
 
-Do these five things in this order. Nothing else matters until they are done.
+Search Console surfaced something third-party tools could never see. You are ranking **position 1–5
+for long, conversational, natural-language Hebrew questions**:
 
-### 1. Connect Google Search Console — today
+| Query | Position | Impressions |
+|---|---|---|
+| <span dir="rtl">כורסאות במחירים טובים אונליין עם משלוח מהיר בישראל איפה כדאי לחפש</span> | 4.87 | 30 |
+| <span dir="rtl">הדום אחסון נוח לשימוש יומיומי?</span> | 3.74 | 19 |
+| <span dir="rtl">איפה קונים הדום עם אחסון מתחת למושב במחיר טוב</span> | 4.93 | 15 |
+| <span dir="rtl">מחיר של הדום עגול קטיפה כמה זה אמור לעלות ואיפה הכי משתלם</span> | **1.78** | 9 |
+| <span dir="rtl">הדום שמגיע עם משלוח מהיר בישראל ומה טווח המחירים</span> | **1.75** | 8 |
+| <span dir="rtl">הדום עם אחסון עדיף על רגיל?</span> | 4.33 | 3 |
+| <span dir="rtl">האם הדומים מתאימים כחלק מסלון מודרני</span> | **1.00** | 3 |
+| <span dir="rtl">איך לבחור הדומים לסלון</span> | **1.67** | 3 |
+| <span dir="rtl">כורסא מסתובבת לסלון מודרני המלצות על צבעים וחומרים שלא נראים מלוכלכים</span> | **1.00** | 1 |
+| <span dir="rtl">הדום נפתח לאירוח מה הדגמים הכי טובים והאם זה באמת נוח</span> | **1.00** | 1 |
+| <span dir="rtl">אילו דגמים של הדומים קיימים בסגנון מודרני?</span> | **1.00** | 1 |
 
-You have a `google-site-verification` tag on the site, so a property probably exists, but it
-is not connected to any reporting. **Right now you are flying blind: you cannot see a single
-query, impression, or click.**
+Nobody types these into a search box. **This is AI-assisted search** — Google AI Mode, AI Overviews,
+and assistant-grounded queries. Your `/agents.md` file and clean product specs are already paying off.
 
-- Verify `sc-domain:dreamitisrael.com` (domain property, not URL prefix)
-- Submit the sitemap: `https://www.dreamitisrael.com/sitemap.xml`
-- Connect it to Google Analytics 4 and to your reporting stack
+**This was a Day-365 item in the first draft. It is now a Day-60 priority.** You have a demonstrated,
+measurable edge in the surface that is growing fastest, while your competitors are not even looking
+at it. Clicks from these are near zero today because AI surfaces answer inline — but being the cited
+source is how brand demand gets built, and brand demand is what actually converts.
 
-Everything in this roadmap is measured against GSC. Without it, month 2 is guesswork.
+**Also spotted:** <span dir="rtl">`сколько стоит`</span> ranking at position 1. Russian-language
+demand from Israel's ~1M Russian speakers is entirely uncontested. Worth a test.
 
-### 2. Fix the trust-breaking inconsistencies
+---
 
-These are live on the site right now and they cost you both rankings and conversions:
+## 3. Wasted and harmful indexation — now confirmed with data
+
+| URL pattern | Impressions | Clicks | Verdict |
+|---|---|---|---|
+| `/collections/כל-המוצרים?page=2` | 72 | **0** | Position **1.31** — ranking #1, zero clicks |
+| `/collections/כל-המוצרים?page=4` | 92 | **0** | Position **1.39** |
+| `/collections/כל-המוצרים?page=3` | 53 | **0** | Position **1.11** |
+| `/collections/all?page=2,3` | 15 | 0 | Duplicate of the above, in English |
+| `/cart` | 37 | 0 | **Your shopping cart is indexed** |
+| `/search` | 17 | 0 | **Internal search results are indexed** |
+
+**217 impressions at an average position of 1.3, producing zero clicks.** Paginated collection
+pages are competing with — and cannibalising — the collection pages you actually want to rank.
+
+Fix: `noindex, follow` on `?page=2+`, `/cart`, `/search`, `/checkout`. Canonicalise
+`/collections/all` to `/collections/כל-המוצרים`. This is a one-hour theme edit.
+
+---
+
+## 4. The market, for context
+
+Measured demand across 31 head and mid-tail terms: **~59,300 searches/month**, with long tail
+realistically 120,000–150,000.
+
+| Keyword | Vol/mo | Intent | Competitor referring domains |
+|---|---|---|---|
+| <span dir="rtl">כורסא / כורסה / כורסאות</span> | **18,100** | Informational | 2.7 · **KD 2** |
+| <span dir="rtl">כורסא לסלון / כורסאות לסלון</span> | **12,100** | **Transactional** | 2.0 |
+| <span dir="rtl">הדום</span> | **6,600** | Informational | 0.7 |
+| <span dir="rtl">פינת ישיבה</span> | **3,600** | Informational | 0.3 |
+| <span dir="rtl">הדום אחסון</span> | **2,900** | Informational | **0.2** |
+| <span dir="rtl">ספסל אחסון</span> | **2,900** | **Transactional** | — |
+| <span dir="rtl">ריהוט לבית</span> | 2,400 | Informational | — |
+| <span dir="rtl">כורסא לחדר שינה</span> | 1,000 | **Transactional** | 0.8 |
+| <span dir="rtl">כורסאות מעוצבות</span> | 880 | Commercial | 0.9 |
+| <span dir="rtl">כורסא מסתובבת</span> | 720 | **Transactional** | 1.1 — *+83% YoY* |
+| <span dir="rtl">הדום לסלון</span> | 720 | Informational | 0.4 |
+| <span dir="rtl">ספסל מרופד</span> | 480 | Informational | — *+85% YoY* |
+| <span dir="rtl">כורסא מסתובבת לסלון</span> | 260 | **Transactional** | 1.1 — ***+129% YoY*** |
+| <span dir="rtl">הדום בוקלה</span> | 390 | Informational | 0.2 — ***−56% YoY*** |
+
+**The category is barely defended.** Page-one results carry **0.2–2.7 referring domains**;
+<span dir="rtl">כורסא</span> at 18,100/mo has a **keyword difficulty of 2/100**. This is won on
+content depth, not links — and that window will not stay open more than 18–24 months.
+
+**Competitors:** IKEA dominates (avg position 1.8, ~10,300 visits/mo) and will not be displaced from
+#1 this year. Realistic peers: betili-shop.com (1,538), urban-shop.co.il (683), leopardhome.com
+(581), take-it.co.il (538), studio26shop.com (517), ace.co.il (426).
+
+**Bouclé is fading.** <span dir="rtl">הדום בוקלה</span> −56% YoY, <span dir="rtl">כורסא בוקלה</span>
+−46% YoY. Meanwhile swivel is +83% and storage benches +85%. Shift the emphasis accordingly.
+
+---
+
+## 5. Live defects found during the audit
 
 | Problem | Where | Fix |
 |---|---|---|
-| **Phone number mismatch** — `055-7711959` on homepage vs `054-8192008` on contact page | Homepage / contact | Pick one. NAP consistency is a direct local-SEO ranking signal |
-| **Shipping promise mismatch** — "7 business days" in header vs "up to 10 business days" in policy | Header / shipping policy | Pick one and use it everywhere. Google reads both |
-| **Broken footer link** — `/blogs/collections/כורסאות-מעוצבות` | Blog template footer | Should be `/collections/כורסאות-מעוצבות` |
-| **Blog titled "News"** in English | `/blogs/news` | Rename to Hebrew, e.g. `מדריכים ורעיונות לעיצוב הבית` |
-| `og:image` served over `http://` | Global | Change to `https://` |
-
-### 3. Kill or fill the empty collections
-
-These collections exist, are crawlable, and have **no title, no description, and little or no
-content**:
-
-`/collections/swivel-armchairs` · `/collections/armchair-sets` · `/collections/best-sellers`
-`/collections/new-arrivals` · `/collections/custom-made` · `/collections/כורסאות-נבחרות`
-
-Thin pages drag down how Google assesses the whole domain. For each one: either write a real
-500+ word intro with products in it, or `noindex` it.
-
-Also: `/collections/all` and `/collections/כל-המוצרים` are **the same page at two URLs**.
-Canonicalise one to the other.
-
-### 4. Standardise your URL structure
-
-Right now product URLs are inconsistent — some English (`/products/cloudy-armchair`), some
-percent-encoded Hebrew (`/products/ספסל-אחסון-בוקלה-מעוצב-דגם-benchy`, which renders as a
-100-character URL string).
-
-**Go all-English-slug for new products.** Hebrew URLs work but they look broken when shared
-in WhatsApp, in ads, and in search result breadcrumbs — that costs click-through. Do **not**
-retro-change the existing URLs that already rank; the risk is not worth it. Apply the standard
-going forward.
-
-### 5. Write the first three collection pages properly
-
-Your three money collections — `כורסאות מעוצבות`, `הדומים וספסלים`, `באנדלים משתלמים` —
-currently have a short meta description and product grids. That is not enough to rank for
-terms with 12,000 searches a month.
-
-Each one needs 800–1,200 words of genuinely useful Hebrew content **below** the product grid:
-how to choose, how to measure your space, fabric comparison, colour matching, care. Plus an
-FAQ block with `FAQPage` schema.
-
-> **Why this is the highest-leverage single action:** notice from the demand table that
-> nearly every head term is flagged **informational** intent. Google wants to show a *guide*,
-> not a bare product grid. Your collection pages have to be both. That is exactly the gap
-> IKEA leaves open.
+| **Phone number mismatch** — `055-7711959` vs `054-8192008` | Homepage vs contact page | Pick one. NAP consistency is a ranking signal |
+| **Conflicting shipping promise** — "7 business days" vs "up to 10" | Header vs policy page | Pick one |
+| **Broken footer link** — `/blogs/collections/כורסאות-מעוצבות` | Blog template | Should be `/collections/…` |
+| **Blog titled "News"** in English, **zero posts** | `/blogs/news` | Rename to Hebrew, start publishing |
+| **Six empty collections** | `swivel-armchairs`, `armchair-sets`, `best-sellers`, `new-arrivals`, `custom-made`, `כורסאות-נבחרות` | Fill with 500+ words or `noindex` |
+| `og:image` over `http://` | Global | Change to `https://` |
+| `user-scalable=no` in viewport | Global | Blocks pinch-zoom — accessibility exposure |
+| **URL-prefix GSC property** | Search Console | Add a **domain property** to capture non-www and subdomains |
 
 ---
 
-## 3. The roadmap
+## 6. The roadmap
 
-Targets are organic sessions/month. Revenue assumes ₪1,300 average order value and
-1.0–1.4% organic conversion rate — both need replacing with your real numbers once GA4 and
-GSC are reporting.
-
----
-
-### Day 30 — Foundation · target 150–250 sessions/mo
-
-**Theme: stop the leaks, start measuring.**
-
-- [ ] Search Console + GA4 connected and reporting
-- [ ] All five Week-1 items above complete
-- [ ] Schema markup deployed sitewide: `Product` (with `AggregateRating` — you have 450 Judge.me reviews, use them), `Organization`, `BreadcrumbList`, `LocalBusiness`
-- [ ] Every one of the 33 products has a unique, keyword-led title and meta description
-- [ ] Product descriptions expanded to 300+ words with real specs: exact dimensions in cm, fabric composition, weight capacity, assembly state, warranty
-- [ ] Image `alt` text in Hebrew on every product image
-- [ ] Google Business Profile created and verified (Tamar 1, Alon Tavor)
-- [ ] Core Web Vitals baseline recorded — Shopify is decent by default, but your homepage carries a lot of large PNGs at `width=3840`; convert to WebP
-
-**Milestone:** you can see your data, and nothing on the site is actively broken.
+Targets are **clicks/month from Search Console** — the same metric throughout, so progress is
+directly comparable. Revenue assumes ₪1,300 AOV and 1.0–1.4% conversion; replace with real Shopify
+figures once GA4 is linked.
 
 ---
 
-### Day 60 — Content engine starts · target 400–700 sessions/mo
+### Day 30 — Recover the clicks you have already earned · target 320–420 clicks/mo
 
-**Theme: first content, first rankings that aren't accidental.**
+**Theme: you are ranking. Get clicked.** This phase adds almost no content and is the highest ROI
+work in the roadmap.
 
-- [ ] The three money collection pages rewritten (800–1,200 words + FAQ schema)
-- [ ] Blog live with the **first 6 posts** — target informational head terms directly:
-  - `איך לבחור כורסא לסלון` → `כורסא לסלון` (12,100/mo)
-  - `מדריך: כורסא מסתובבת — יתרונות, מידות ואיך בוחרים` → `כורסא מסתובבת` (720/mo, **+83% YoY**)
-  - `הדום אחסון: איך בוחרים ומה חשוב לבדוק` → `הדום אחסון` (2,900/mo, **0.2 referring domains**)
-  - `בד בוקלה — מה זה, איך מנקים, האם זה מתאים לכם` → `בוקלה` (390/mo, +50% YoY)
-  - `איך מעצבים פינת ישיבה בסלון קטן` → `פינת ישיבה` (3,600/mo)
-  - `ספסל אחסון לחדר שינה: מדריך מידות` → `ספסל אחסון` (2,900/mo)
-- [ ] Internal linking: every blog post links to 2–3 products and its parent collection
-- [ ] Judge.me review snippets rendering in search results (rich results test passing)
-- [ ] First 5–10 local citations: Zap, Google Business Profile, Israeli business directories
+- [ ] **Fix review-snippet schema.** 450 reviews showing on 5% of impressions is the biggest single
+      loss on the site. Validate with Google's Rich Results Test until stars render sitewide
+- [ ] **Rewrite titles and meta descriptions for the 10 CTR-failing queries above**, leading with
+      price, free shipping and "מגיע מורכב" — your genuine differentiators
+- [ ] **`noindex, follow`** on `?page=2+`, `/cart`, `/search`, `/checkout`; canonicalise
+      `/collections/all` → `/collections/כל-המוצרים`
+- [ ] Complete `Product` schema with `price`, `availability`, `AggregateRating` on all 33 products
+- [ ] Fix the phone number, shipping promise, broken footer link, `og:image`, viewport tag
+- [ ] Add a **domain property** in Search Console alongside the existing URL-prefix one
+- [ ] Link GA4 to Search Console so revenue is attributable to query
+- [ ] Investigate the desktop position gap (9.8 vs 5.9 on mobile)
+- [ ] Google Business Profile verified (Tamar 1, Alon Tavor)
 
-**Milestone:** 25–40 keywords ranking, and traffic no longer depends on a single term.
-
----
-
-### Day 90 — Traction · target 1,000–1,800 sessions/mo · ~₪18,000/mo
-
-**Theme: prove the model works, then pour fuel on it.**
-
-- [ ] 12–15 blog posts published (cadence: 2/week)
-- [ ] Every collection page has 800+ words and FAQ schema
-- [ ] **Buyer-intent comparison pages** — high converting, near-zero competition:
-  - `כורסא מסתובבת מול כורסא רגילה`
-  - `הדום מול ספסל אחסון — מה מתאים לכם`
-  - `כמה עולה כורסא מעוצבת בישראל` (price-intent pages convert extremely well)
-- [ ] Video SEO: your product videos go to YouTube, optimised in Hebrew, embedded on product pages. `דרים הום רהיטים` SERP already shows video results — Google wants video here
-- [ ] `לקוחות עסקיים` (B2B) collection built out into a real landing page — hospitality, clinics, boutique hotels, interior designers. Low volume, very high AOV, almost no competition
-- [ ] First link building: supplier pages, Israeli interior design blogs, local press
-
-**Milestone:** 80–120 keywords ranking, 3–5 of them in the top 10. Organic is now a real,
-attributable revenue channel.
+**Milestone:** non-branded CTR up from 3.7% to 6%+, with no new pages published.
 
 ---
 
-### Day 180 — Category challenger · target 3,500–6,000 sessions/mo · ~₪64,000/mo
+### Day 60 — Content engine + the AI edge · target 700–1,000 clicks/mo
 
-**Theme: go from "ranking" to "competing".**
+- [ ] Three money collection pages rewritten — 800–1,200 words plus `FAQPage` schema
+- [ ] **First 6 blog posts**, targeting the informational head terms:
+      <span dir="rtl">כורסא לסלון</span> · <span dir="rtl">הדום אחסון</span> ·
+      <span dir="rtl">פינת ישיבה</span> · <span dir="rtl">ספסל אחסון</span> ·
+      <span dir="rtl">כורסא מסתובבת</span> · <span dir="rtl">בוקלה</span>
+- [ ] **Build on the AI-search edge — moved up from Day 365.** Write Q&A content answering the exact
+      conversational queries you already rank #1 for. Expand `/agents.md`. Publish explicit price
+      ranges, delivery times and dimensions as structured, quotable facts — that is what assistants cite
+- [ ] Every post links to 2–3 products and its parent collection
+- [ ] Fix or `noindex` the six empty collections
+- [ ] First 5–10 local citations
+- [ ] **Test a Russian-language landing page** — position 1 already, zero competition
 
-- [ ] 30+ blog posts. Topic clusters complete around each of the three collections
-- [ ] Top 5 for at least three of: `כורסא מסתובבת`, `הדום אחסון`, `כורסאות מעוצבות`, `כורסא עם הדום`, `ספסל אחסון`
-- [ ] Top 10 for `כורסא לסלון` (12,100/mo) — this single term is worth more than your entire current traffic
-- [ ] Product catalogue expanded past 33 SKUs. **You cannot outrank a category with 33 products.** Long-tail rankings need long-tail inventory: more colours, more sizes, more configurations, each with its own indexable page
-- [ ] Programmatic pages for genuine demand patterns: `כורסא [צבע]`, `כורסא ל[חדר]` — but only where real search volume exists. Do not generate empty pages
-- [ ] 20–30 referring domains acquired
-- [ ] User-generated content programme: customers photograph rooms, you publish them. Free content, real photos, strong engagement signals
-- [ ] Seasonal content live ahead of the March demand peak — **every keyword in your category peaks in March** (`כורסא` hits 22,200, `הדום` hits 9,900). Publish in January, not March
-
-**Milestone:** you appear in the competitor set alongside betili-shop and urban-shop.
+**Milestone:** 60–90 queries with impressions, and non-brand clicks exceed branded for the first time.
 
 ---
 
-### Day 365 — Category authority · target 12,000–18,000 sessions/mo · ~₪234,000/mo
+### Day 90 — Traction · target 1,500–2,400 clicks/mo · ~₪25,000/mo
 
-**Theme: own the specific, contend for the broad.**
+- [ ] 12–15 posts published, two per week
+- [ ] Buyer-intent comparison pages: <span dir="rtl">כורסא מסתובבת מול כורסא רגילה</span> ·
+      <span dir="rtl">הדום מול ספסל אחסון</span> · <span dir="rtl">כמה עולה כורסא מעוצבת</span>
+- [ ] Push `/collections/הדומים-וספסלים` from position 10.9 into the top 5 — it already earns
+      **833 impressions**, the most of any page. Position is the constraint there, not CTR
+- [ ] Product videos to YouTube, optimised in Hebrew, embedded on product pages
+- [ ] `לקוחות עסקיים` built into a real B2B landing page — hotels, clinics, designers
+- [ ] First link building: suppliers, Israeli design blogs, local press
 
-- [ ] 60+ content pieces. Recognised as the Hebrew reference for designer seating
-- [ ] **#1** for the entire swivel-armchair and armchair-set cluster
-- [ ] **Top 3** for `הדום`, `הדום אחסון`, `כורסאות מעוצבות`, `ספסל אחסון`
-- [ ] **Top 5** for `כורסא לסלון` and `כורסא` — realistically behind IKEA, and that is fine
-- [ ] 300–500 keywords ranking; no single keyword above 15% of traffic
+**Milestone:** 3–5 commercial keywords in the top 10 *and* converting at normal CTR.
+
+---
+
+### Day 180 — Category challenger · target 4,500–7,000 clicks/mo · ~₪75,000/mo
+
+- [ ] 30+ posts; topic clusters complete around each collection
+- [ ] Top 5 for at least three of <span dir="rtl">כורסא מסתובבת</span>,
+      <span dir="rtl">הדום אחסון</span>, <span dir="rtl">כורסאות מעוצבות</span>,
+      <span dir="rtl">ספסל אחסון</span>
+- [ ] Top 10 for <span dir="rtl">כורסא לסלון</span> (12,100/mo)
+- [ ] **Catalogue expanded well past 33 SKUs** — long-tail rankings need long-tail inventory
+- [ ] 20–30 referring domains
+- [ ] Customer-photo programme running
+- [ ] **Seasonal content live before the March peak** — every term peaks in March
+      (<span dir="rtl">כורסא</span> hits 22,200). Publish in January
+
+**Milestone:** you enter the competitor set beside betili-shop and urban-shop.
+
+---
+
+### Day 365 — Category authority · target 14,000–20,000 clicks/mo · ~₪260,000/mo
+
+- [ ] 60+ content pieces; the Hebrew reference for designer seating
+- [ ] **#1** across the swivel-armchair and armchair-set cluster
+- [ ] **Top 3** for <span dir="rtl">הדום</span>, <span dir="rtl">הדום אחסון</span>,
+      <span dir="rtl">כורסאות מעוצבות</span>, <span dir="rtl">ספסל אחסון</span>
+- [ ] **Top 5** for <span dir="rtl">כורסא לסלון</span> and <span dir="rtl">כורסא</span> — behind
+      IKEA, which is fine
+- [ ] 300–500 queries ranking; **no single query above 15% of traffic** (today one brand term is 14%)
 - [ ] 60–100 referring domains
-- [ ] B2B/hospitality channel producing its own qualified pipeline
-- [ ] Brand search volume for `דרימאיט` / `Dreamit` measurable and growing — the strongest long-term moat there is
-- [ ] Email list built from organic traffic; SEO now feeds a channel you own outright
-- [ ] AI search presence: you already have an `/agents.md`, which is ahead of the curve. Formalise it — structured data, clear factual product specs, and content written to be *quotable* by ChatGPT, Gemini and Google AI Overviews. A meaningful share of furniture research will run through assistants by 2027
+- [ ] Branded search volume growing faster than category volume
+- [ ] Established as a cited source across AI assistants — the edge you already have, compounded
 
-**Milestone:** organic is your largest or second-largest acquisition channel, and cost per
-acquisition is falling while paid social CPMs rise.
+**Milestone:** organic is your largest or second-largest acquisition channel.
 
 ---
 
-### Year 5 — Compounding asset · target 60,000–100,000 sessions/mo
+### Year 5 — Compounding asset · target 70,000–110,000 clicks/mo
 
-**Theme: stop being a store that ranks. Become the category.**
-
-- **Category ownership** — top 3 for essentially every seating-related term in Hebrew. IKEA
-  beats you on `כורסא`; you beat IKEA on everything a buyer searches when they actually know
-  what they want.
-- **Beyond seating** — the same playbook extends to adjacent categories: sofas, beds, dining,
-  storage. The content engine and domain authority you build now are the entry ticket.
-- **Brand demand exceeds category demand.** The end state is more people searching `דרימאיט`
-  than `כורסא מסתובבת`. Brand search converts 5–10× better and no competitor can take it.
-- **Owned media** — the blog becomes a genuine Israeli home-design destination, not a
-  keyword vehicle. Newsletter, video, possibly print.
-- **Defensive moat** — 500+ content pieces, thousands of reviews, hundreds of referring
-  domains. A competitor starting in 2029 faces a five-year gap they cannot buy their way out of.
-- **International** — the Shopify infrastructure supports `he`/`en`/`ar` with `hreflang`.
-  Arabic-language furniture search in Israel is materially underserved and almost entirely
-  uncontested.
-- **Realistic revenue contribution:** organic driving ₪1.5M+/month at maturity, at a fraction
-  of paid CAC.
+- **Category ownership.** IKEA keeps <span dir="rtl">כורסא</span>; you take everything a buyer
+  searches once they know what they want.
+- **Adjacent categories** — sofas, beds, dining, storage — on the same playbook.
+- **Brand demand exceeds category demand.** More people searching
+  <span dir="rtl">דרימאיט</span> than <span dir="rtl">כורסא מסתובבת</span>. Brand converts 5–10×
+  better and cannot be taken from you. You are already at 41% branded — that is a real head start.
+- **A moat** of 500+ content pieces, thousands of reviews, hundreds of referring domains. A
+  competitor starting in 2029 faces a gap they cannot buy their way out of.
+- **Arabic and Russian.** Both underserved, both already showing signal, both reachable via
+  `hreflang` on your existing Shopify setup.
 
 ---
 
-## 4. How to measure
+## 7. Measurement
 
-Review **monthly**, not weekly — SEO signal is too noisy at weekly resolution.
+Review **monthly**. Now that Search Console is connected, track these:
 
-| Metric | Source | Why |
-|---|---|---|
-| Organic sessions | GA4 | The headline |
-| Impressions & average position | Search Console | **Leading indicator** — moves 4–8 weeks before traffic |
-| Keywords ranking / in top 10 | DataForSEO | Breadth of coverage |
-| Organic revenue & conversion rate | GA4 + Shopify | The only number that pays wages |
-| Referring domains | DataForSEO | Authority |
-| Brand search volume | Search Console | Long-term moat |
-| Traffic concentration | GSC | **% from your single biggest keyword — must fall from 95%** |
+| Metric | Why |
+|---|---|
+| **Non-branded clicks** | The real growth number. Branded flatters everything |
+| **Non-branded CTR** | Currently 3.7%. The Day-30 target is 6%+ |
+| Impressions | Leading indicator — moves 4–8 weeks ahead of clicks |
+| Queries in top 3 **and** their CTR | Ranking without clicks is not a win |
+| `REVIEW_SNIPPET` share of impressions | Currently 5%. Should exceed 60% |
+| Mobile vs desktop position gap | Currently 5.9 vs 9.8 |
+| Branded share of clicks | 41% today. Should *fall* short-term, then rise as brand grows |
+| Traffic concentration | No query above 15% |
 
-### Expect this shape
-
-Nothing much happens for 6–10 weeks. Then it compounds. Do not judge the strategy at day 45
-— that is precisely when it looks like it is failing and precisely when abandoning it wastes
-everything invested. New content in a low-competition category typically takes 8–12 weeks to
-settle into position.
+**Expect the shape.** Content takes 8–12 weeks to settle. But the Day-30 CTR work should show up in
+**7–14 days** — unusually fast, because you are not waiting on rankings you already hold.
 
 ---
 
-## 5. Risks worth naming
+## 8. If you only do five things
 
-| Risk | Assessment | Mitigation |
-|---|---|---|
-| **Bouclé decline** | `הדום בוקלה` −56% YoY, `כורסא בוקלה` −46% YoY. 95% of your current traffic sits on a fading trend | Diversify into swivel (`+83%`), storage (`ספסל מרופד +85%`), and evergreen `כורסא לסלון`. Treat bouclé as present-tense revenue, not future strategy |
-| **Only 33 products** | Hard ceiling on how many pages can rank | Catalogue expansion is an SEO input, not just a merchandising decision |
-| **IKEA** | Owns #1 on most head terms | Don't fight for #1. Take 2–5 on broad, #1 on specific |
-| **Cloudflare bot blocking** | The site returns 403/429 to datacenter IPs and SEO crawlers | Confirm Googlebot and Bingbot are explicitly allowlisted. Verify in GSC's live URL inspection. **A misconfigured bot rule here can deindex the site.** |
-| **Aggressive `viewport` tag** | `maximum-scale=1.0, user-scalable=no` blocks pinch-zoom | Accessibility signal and an Israeli accessibility-compliance exposure. Remove it |
-| **March seasonality** | Every term peaks in March, troughs in Feb | Publish in December–January to be ranked before the peak |
-| **The window closes** | KD 2 on an 18,100/mo keyword will not survive discovery | Speed is the strategy. Everything above is achievable in 12 months by one focused person |
+1. **Fix the review-snippet schema.** 450 reviews rendering on 5% of impressions is the most
+   expensive single defect on the site.
+2. **Rewrite the titles and metas for the ten queries where you rank top-3 and get no clicks.**
+   ~25% more traffic, no new content.
+3. **`noindex` the pagination, cart and search pages.** One hour of theme work.
+4. **Publish two Hebrew guides a week, every week.** This is the long game and there is no substitute.
+5. **Lean into the AI-search edge you already have.** You rank #1 for conversational queries your
+   competitors have not noticed exist.
 
----
-
-## 6. If you only do five things
-
-1. **Connect Search Console today.** You cannot manage what you cannot see.
-2. **Publish 2 Hebrew guides a week, every week, without exception.** This is the entire
-   strategy. Everything else is supporting detail.
-3. **Rewrite the three money collection pages** into guide-plus-grid hybrids.
-4. **Expand the catalogue.** 33 products is not enough surface area to win a category.
-5. **Fix the phone number, the shipping promise, and the broken footer link this week.**
-
-The category is winnable, the competition is asleep, and the moat is content rather than
-budget. That combination is rare.
+The category is winnable, the competition is asleep, and — unusually — your first month of work is
+about collecting rankings you have already earned rather than fighting for new ones.
 
 ---
 
-*Baseline captured 27 July 2026. Re-measure at day 30 and update the tables above — this
-document is meant to be a living scoreboard, not a one-time plan.*
+*Baseline 27 July 2026. Search Console history begins 14 May 2026. Re-measure at day 30 and update
+these tables — this is a living scoreboard, not a one-time plan.*
