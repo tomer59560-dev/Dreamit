@@ -27,7 +27,7 @@ const PRICE_BY_SKU = {
   CloudyDuo: '3189', AuriDuo: '1149', AuriOli: '839', AuriNest: '789',
   AuriBenchy: '1189', FlowNest: '1289', FlowBenchy: '1689',
   CloudyLoungeDuo: '3749', CloudyBenchy: '2189', FlowerDuo: '3189',
-  FlowerLounge: '1839',
+  FlowerLounge: '1839', BenchyDuo: '1189',
 };
 
 const DEFAULT_SHIPPING    = process.env.DEFAULT_SHIPPING    || '0';
