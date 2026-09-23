@@ -18,6 +18,7 @@ const SHIPPING_BY_SKU = {};
 
 const DEFAULT_SHIPPING    = process.env.DEFAULT_SHIPPING    || '0';
 const DEFAULT_DELIVERY    = process.env.DEFAULT_DELIVERY    || '3';
+const PREORDER_DELIVERY   = process.env.PREORDER_DELIVERY   || '90';
 const DEFAULT_WARRANTY    = process.env.DEFAULT_WARRANTY    || '12 חודשים';
 const DEFAULT_WARRANTY_BY = process.env.DEFAULT_WARRANTY_BY || 'Dream It Israel';
 const PAGES_BASE_URL      = process.env.PAGES_BASE_URL      || 'https://tomer59560-dev.github.io/Dreamit';
@@ -48,6 +49,10 @@ function zapUrl(url) {
 }
 function strip(s)    { return (s || '').replace(/<[^>]*>/g, '').trim(); }
 function trunc(s, n) { return String(s || '').substring(0, n); }
+function deliveryForProduct(p) {
+  // The storefront marks pre-orders with this tag and displays ~90 business days.
+  return (p.tags || []).includes('pre-order-sale') ? PREORDER_DELIVERY : DEFAULT_DELIVERY;
+}
 
 // ─── SHOPIFY API ─────────────────────────────────────────────────────────────
 
@@ -93,7 +98,7 @@ async function getProductsShopify(collectionHandle) {
         warranty:    DEFAULT_WARRANTY,
         warrantyBy:  DEFAULT_WARRANTY_BY,
         shipping:    SHIPPING_BY_SKU[variant.sku] || DEFAULT_SHIPPING,
-        delivery:    DEFAULT_DELIVERY,
+        delivery:    deliveryForProduct(p),
       });
     }
     if (batch.length < 250) break;
@@ -185,7 +190,7 @@ async function scrapeShopifyCollection(handle) {
           image: p.images?.[0]?.src || '', price: v.price || '',
           barcode: v.barcode || '', brand: p.vendor || '',
           warranty: DEFAULT_WARRANTY, warrantyBy: DEFAULT_WARRANTY_BY,
-          shipping: SHIPPING_BY_SKU[v.sku] || DEFAULT_SHIPPING, delivery: DEFAULT_DELIVERY,
+          shipping: SHIPPING_BY_SKU[v.sku] || DEFAULT_SHIPPING, delivery: deliveryForProduct(p),
         });
       } catch { /* skip */ }
     }
