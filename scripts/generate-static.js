@@ -16,25 +16,11 @@ const CAT_DIR    = path.join(DIST_DIR, 'category');
 // Free shipping for all products (site offers free shipping)
 const SHIPPING_BY_SKU = {};
 
-// Fixed sale prices (incl. VAT) per SKU — from client price sheet
-const PRICE_BY_SKU = {
-  CLOUD: '299', HUG: '299', CLOUDY: '1599', FLOW360: '1099', AURI: '599',
-  FLOWER: '1599', NEST: '199', Oli: '249', 'FLOWER-BASE': '249', BENCHY: '599',
-  CloudHugSet: '589', FlowerCloudSet: '1889', FlowerHugSet: '1889',
-  HugDuoSet: '589', CloudDuoSet: '589', AuriCloudSet: '889',
-  AuriCozySet: '889', FlowSoftSet: '1389', FlowContrastSet: '1389',
-  CloudyHugSet: '1889', CLOUDYSET: '1889', Flow360Duo: '2189',
-  CloudyDuo: '3189', AuriDuo: '1149', AuriOli: '839', AuriNest: '789',
-  AuriBenchy: '1189', FlowNest: '1289', FlowBenchy: '1689',
-  CloudyLoungeDuo: '3749', CloudyBenchy: '2189', FlowerDuo: '3189',
-  FlowerLounge: '1839', BenchyDuo: '1189',
-};
-
 const DEFAULT_SHIPPING    = process.env.DEFAULT_SHIPPING    || '0';
 const DEFAULT_DELIVERY    = process.env.DEFAULT_DELIVERY    || '3';
 const DEFAULT_WARRANTY    = process.env.DEFAULT_WARRANTY    || '12 חודשים';
 const DEFAULT_WARRANTY_BY = process.env.DEFAULT_WARRANTY_BY || 'Dream It Israel';
-const PAGES_BASE_URL      = process.env.PAGES_BASE_URL      || 'https://tomer59560-dev.github.io/META-ADS';
+const PAGES_BASE_URL      = process.env.PAGES_BASE_URL      || 'https://tomer59560-dev.github.io/Dreamit';
 
 const http = axios.create({
   baseURL: SITE_URL,
@@ -53,8 +39,12 @@ function xmlEsc(s) {
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;').replace(/'/g, '&apos;');
 }
-function sanitizeUrl(url) {
-  return (url || '').replace(/'/g, '').replace(/[^\x00-\x7F]/g, c => encodeURIComponent(c));
+function zapUrl(url) {
+  // Shopify's Hebrew handles are short in UTF-8 XML, but percent encoding them
+  // can exceed ZAP's 255-character limit. Never cut a product URL mid-handle.
+  const value = String(url || '').replace(/'/g, '%27');
+  if ([...value].length > 255) throw new Error(`ZAP URL exceeds 255 characters: ${value}`);
+  return value;
 }
 function strip(s)    { return (s || '').replace(/<[^>]*>/g, '').trim(); }
 function trunc(s, n) { return String(s || '').substring(0, n); }
@@ -97,7 +87,7 @@ async function getProductsShopify(collectionHandle) {
         description: strip(p.body_html || ''),
         url:         `${SITE_URL}/products/${p.handle}`,
         image,
-        price:       PRICE_BY_SKU[variant.sku] || variant.price || '',
+        price:       variant.price || '',
         barcode:     variant.barcode || '',
         brand,
         warranty:    DEFAULT_WARRANTY,
@@ -128,7 +118,7 @@ async function getProductsWC(catId) {
     return {
       id: String(p.id), name: strip(p.name), model: p.sku || '',
       description: strip(p.short_description || p.description),
-      url: p.permalink, image, price: PRICE_BY_SKU[p.sku] || p.price || '',
+      url: p.permalink, image, price: p.price || '',
       barcode: '', brand,
       warranty: DEFAULT_WARRANTY, warrantyBy: DEFAULT_WARRANTY_BY,
       shipping: SHIPPING_BY_SKU[p.sku] || DEFAULT_SHIPPING, delivery: DEFAULT_DELIVERY,
@@ -192,7 +182,7 @@ async function scrapeShopifyCollection(handle) {
         products.push({
           id: String(v.id || p.id), name: strip(p.title), model: v.sku || p.handle,
           description: strip(p.body_html), url: fullUrl,
-          image: p.images?.[0]?.src || '', price: PRICE_BY_SKU[v.sku] || v.price || '',
+          image: p.images?.[0]?.src || '', price: v.price || '',
           barcode: v.barcode || '', brand: p.vendor || '',
           warranty: DEFAULT_WARRANTY, warrantyBy: DEFAULT_WARRANTY_BY,
           shipping: SHIPPING_BY_SKU[v.sku] || DEFAULT_SHIPPING, delivery: DEFAULT_DELIVERY,
@@ -236,8 +226,7 @@ async function getProducts(cat, method) {
     }
     return await scrapeShopifyCollection(cat.slug);
   } catch (e) {
-    console.log(`    ✗ products for ${cat.slug}: ${e.message}`);
-    return [];
+    throw new Error(`Failed to fetch products for ${cat.slug}: ${e.message}`);
   }
 }
 
@@ -248,8 +237,8 @@ function buildXml(products) {
   for (const p of products) {
     const name    = trunc(strip(p.name), 120);
     const details = trunc(strip(p.description), 255);
-    const url     = trunc(sanitizeUrl(p.url), 255);
-    const image   = trunc(sanitizeUrl(p.image), 255);
+    const url     = zapUrl(p.url);
+    const image   = zapUrl(p.image);
     const price   = (p.price || '').replace(/[^\d.]/g, '');
     items += `    <PRODUCT>
       <PRODUCT_URL>${xmlEsc(url)}</PRODUCT_URL>
@@ -312,9 +301,7 @@ ${rows}
   const { cats, method } = await getCategories();
 
   if (!cats.length) {
-    console.log('WARNING: No categories found. Writing empty index.');
-    fs.writeFileSync(path.join(DIST_DIR, 'index.html'), buildIndex([]), 'utf-8');
-    process.exit(0);
+    throw new Error('No categories found; refusing to deploy an empty mirror site.');
   }
 
   fs.writeFileSync(path.join(DIST_DIR, 'index.html'), buildIndex(cats), 'utf-8');
